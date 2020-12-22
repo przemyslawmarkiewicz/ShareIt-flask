@@ -3,22 +3,24 @@
             @import url(https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css);
             </style>
             <div class="min-w-screen bg-gray-200 flex items-center justify-center px-5 py-5">
-                <div class="w-full mx-auto rounded-lg bg-white shadow p-5 text-gray-800" style="max-width: 700px">
+                <div class="w-full mx-auto rounded-lg bg-white shadow p-5 text-gray-800" style="max-width: 800px">
                     <div class="w-full flex mb-4">
                         <div class="flex-grow">
                             <h6 class="font-bold text-md text-gray-600"><a href="{{ url_for('profile', username=row.username) }}">{{ row.username }}</a></h6>
                             <h4 class="font-bold">{{ row.post.title }}</h4>
                         </div>
-                        <div class="w-12 text-right">
+                        <div class="w-14 text-right">
                               <a href="{{ url_for('like_post', post_id=row.post.id) }}">
                                 <i class="mdi mdi-heart text-blue-400 text-3xl"></i>
                               </a>
+                              <p class="text-gray-500 text-xs align-middle">{{ row.post.likes }} likes</p>
                             
                         </div>
                     </div>
                     <div class="w-full mb-4">
                         <p class="text-sm">{{ row.post.text }}</p>
                     </div>
+   
                     <div class="w-full">
                       {%for tag in row.tags%}
                       <div

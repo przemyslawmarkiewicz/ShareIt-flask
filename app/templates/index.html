@@ -2,20 +2,30 @@
 {% block body %}
 
   {% if session.username %}
-    <h3>Share New Post</h3>
-    <form action="{{ url_for('add_post') }}" method="post">
-      <div class="max-w-sm mx-auto p-1 pr-0 flex items-center">
-        <dl>
-            <dt>Title:</dt>
-            <input type="text" placeholder="title" class="flex-1 appearance-none rounded shadow p-3 text-grey-dark mr-2 focus:outline-none" name="title">
-            <dt>Tags (separated by commas):</dt>
-            <dd><input type="text" size="30" name="tags"></dd>
-            <dt>Text:</dt>
-            <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
-        </dl>
-        <input class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-expanded="false" type="submit" value="Share">
+
+  <div class="min-w-screen bg-gray-200 flex items-center justify-center px-5 py-10">
+      <form class="w-full max-w-xl" action="{{ url_for('add_post') }}" method="post">
+        <div class="w-full mx-auto rounded-lg bg-white shadow p-5 text-gray-800" style="max-width: 800px">
+            <h2 class="px-4 pt-3 pb-2 text-gray-800 text-lg">Add a new Post</h2>
+            <div class="w-full md:w-full px-3 mb-2 mt-2">
+            <input class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none py-2 px-3 w-full font-medium placeholder-gray-700 focus:outline-none focus:bg-white" type="text" placeholder="title" name="title" required>
+            </div>
+            <div class="w-full md:w-full px-3 mb-2 mt-2">
+            <input class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none py-2 px-3 w-full font-medium placeholder-gray-700 focus:outline-none focus:bg-white" type="text" placeholder="Tags (separated by commas)" size="30" name="tags" required>
+          </div>
+            <div class="w-full md:w-full px-3 mb-2 mt-2">
+               <textarea class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-32 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white" name="text" placeholder='Content of your post' required></textarea>
+            </div>
+            <div class="w-full md:w-full flex items-start md:w-full px-3">
+               <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+               </div>
+               <div class="-mr-1">
+                  <input type='submit' class="bg-gray-100 font-bold leading-sm uppercase text-gray-700 py-1 px-4 rounded-lg tracking-wide mr-1 hover:bg-blue-400" value='Share'>
+               </div>
+            </div>
+         </form>
       </div>
-      </form>
+   </div>
   {% endif %}
 
 <br>

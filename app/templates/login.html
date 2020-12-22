@@ -1,6 +1,13 @@
 {% extends "_base.html" %}
 {% block body %}
+<div class="text-dig pt-20 pb-20">
+  <p class="w-full text-base sm:text-lg md:text-xl text-center lg:text-2xl xl:text-5xl">
+          Welcome back! <br> 
+  </p>
+
+</div>
   <div class="flex items-center justify-center">
+    <img  class="object-cover w-2/5" src="/static/undraw_authentication.svg">
     <div class="w-full max-w-md">
       <form class="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4 m-5" form action="{{ url_for('login') }}" method="post">
         <div class="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4">

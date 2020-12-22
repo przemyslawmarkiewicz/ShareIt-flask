@@ -42,6 +42,7 @@ class User:
             title=title,
             text=text,
             timestamp=timestamp(),
+            likes=0,
             date=date()
         )
         rel = Relationship(user, 'PUBLISHED', post)
@@ -60,6 +61,11 @@ class User:
     def like_post(self, post_id):
         user = self.find()
         post = matcher.match('Post', id=post_id).first()
+        query = """
+        MATCH (post:Post {id:$id})
+        SET post.likes = post.likes + 1
+        """
+        graph.run(query, id=post_id)
         graph.merge(Relationship(user, 'LIKED', post))
 
     def get_recent_posts(self):
