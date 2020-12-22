@@ -1,25 +1,28 @@
-{% extends "layout.html" %}
+{% extends "_base.html" %}
 {% block body %}
 
-<h2>Home</h2>
   {% if session.username %}
     <h3>Share New Post</h3>
     <form action="{{ url_for('add_post') }}" method="post">
+      <div class="max-w-sm mx-auto p-1 pr-0 flex items-center">
         <dl>
             <dt>Title:</dt>
-            <dd><input type="text" size="30" name="title"></dd>
+            <input type="text" placeholder="title" class="flex-1 appearance-none rounded shadow p-3 text-grey-dark mr-2 focus:outline-none" name="title">
             <dt>Tags (separated by commas):</dt>
             <dd><input type="text" size="30" name="tags"></dd>
             <dt>Text:</dt>
             <dd><textarea name="text" rows="5" cols="40"></textarea></dd>
         </dl>
-        <input type="submit" value="Share">
-    </form>
+        <input class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-expanded="false" type="submit" value="Share">
+      </div>
+      </form>
   {% endif %}
 
 <br>
-
-<h3>Today's Recent Posts</h3>
+<div class="text-center lg:w-2/3 w-full">
+<h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium	 text-black font-mono">
+  Today's recent posts </h1>
+</div>
 {% include "display_posts.html" %}
 
 {% endblock %}

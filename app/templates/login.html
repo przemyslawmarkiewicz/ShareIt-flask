@@ -1,13 +1,48 @@
-{% extends "layout.html" %}
+{% extends "_base.html" %}
 {% block body %}
-  <h2>Login</h2>
-	<form action="{{ url_for('login') }}" method="post">
-        <dl>
-            <dt>Username:</dt>
-            <dd><input type="text" name="username"></dd>
-            <dt>Password:</dt>
-            <dd><input type="password" name="password"></dd>
-        </dl>
-        <input type="submit" value="Login">
-	</form>
+  <div class="flex items-center justify-center">
+    <div class="w-full max-w-md">
+      <form class="bg-white shadow-lg rounded px-12 pt-6 pb-8 mb-4 m-5" form action="{{ url_for('login') }}" method="post">
+        <div class="text-gray-800 text-2xl flex justify-center border-b-2 py-2 mb-4">
+          Login
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-normal mb-2" for="username">
+            Username
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            name="username"
+            type="texs"
+            required
+            autofocus
+            placeholder="Username"
+          />
+        </div>
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-normal mb-2" for="password">
+            Password
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            v-model="form.password"
+            type="password"
+            placeholder="Password"
+            name="password"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <button class="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700" type="submit">Sign In</button>
+          <a class="inline-block align-baseline font-normal text-sm text-blue-500 hover:text-blue-800" href="{{ url_for('register') }}">
+            No account yet?
+          </a>
+        </div>
+      </form>
+      <p class="text-center text-gray-500 text-xs">
+        &copy;2020 ShareIt.
+      </p>
+    </div>
+  </div>
 {% endblock %}

@@ -7,13 +7,14 @@ from config import database_uri, database_user, database_password
 import uuid
 
 graph = Graph(database_uri, auth=(database_user, database_password))
+matcher = NodeMatcher(graph)
+
 
 class User:
     def __init__(self, username):
         self.username = username
 
     def find(self):
-        matcher = NodeMatcher(graph)
         user = matcher.match('User', username= self.username).first()
         return user
 
@@ -34,7 +35,6 @@ class User:
             return False
 
     def add_post(self, title, tags, text):
-        matcher = NodeMatcher(graph)
         user = matcher.match('User', username=self.username).first()
         post = Node(
             'Post',
@@ -59,7 +59,7 @@ class User:
 
     def like_post(self, post_id):
         user = self.find()
-        post = graph.find_one('Post', 'id', post_id)
+        post = matcher.match('Post', id=post_id).first()
         graph.merge(Relationship(user, 'LIKED', post))
 
     def get_recent_posts(self):
@@ -90,8 +90,8 @@ class User:
         # Find how many of the logged-in user's posts the other user
         # has liked and which tags they've both blogged about.
         query = '''
-        MATCH (they:User $username: $they )
-        MATCH (you:User $username: $you )
+        MATCH (they:User {username:$they})
+        MATCH (you:User {username:$you})
         OPTIONAL MATCH (they)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag:Tag),
                        (you)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag)
         RETURN SIZE((they)-[:LIKED]->(:Post)<-[:PUBLISHED]-(you)) AS likes,

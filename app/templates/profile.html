@@ -1,7 +1,10 @@
-{% extends "layout.html" %}
+{% extends "_base.html" %}
 {% block body %}
 
-<h2>{{ username }}'s profile</h2>
+<div class="text-center lg:w-2/3 w-full">
+  <h3 class="title-font sm:text-3xl text-3xl p-4 font-medium	 text-black font-mono">
+    {{ username }}'s profile </h3>
+  </div>
 
 {% if session.username %}
     {% if session.username == username %}

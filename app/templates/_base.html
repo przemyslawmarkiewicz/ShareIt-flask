@@ -1,58 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="../../static/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <title>{% block title %}ShareIt{% endblock title %}</title>
-    <script src="https://kit.fontawesome.com/398150e794.js" crossorigin="anonymous"></script>
-
-</head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link font-weight-bold" href="#">Home</a>
-        </div>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link font-weight-bold" href="#">Posts</a>
-        </div>
-            <div class="navbar-nav mr-1 ml-auto">
-                <a class="nav-item nav-link font-weight-bold" href="#">Login</a>
+<!doctype html>
+<title>ShareIt</title>
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"/>
+<nav class="bg-blue-600">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="flex-shrink-0 flex items-center">
+            <img class="block lg:hidden h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
+            <img class="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow">
+          </div>
+          <div class="hidden sm:block sm:ml-6">
+            <div class="flex space-x-4">
+              <a href="{{ url_for('index') }}" class="bg-blue-800 text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+              {% if session.username %}
+              <a href="{{ url_for('profile', username=session.username) }}" class="text-gray-300 hover:bg-blue-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+              {% endif %}
             </div>
-            <div class="navbar-nav mr-0">
-                <a class="nav-item nav-link font-weight-bold" href="#">Register</a>
+          </div>
+        </div>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div class="flex-shrink-0 flex items-center">
+                {% if session.username %}
+                Logged in as {{ session.username }}
+                {% endif %}
+              </div>
+          <div class="ml-3 relative">
+            {% if not session.username %}
+            <a href="{{ url_for('register') }}" class="text-gray-300 hover:bg-blue-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Register</a>
+            <a href="{{ url_for('login') }}" class="text-gray-300 hover:bg-blue-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}" class="text-gray-300 hover:bg-blue-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+            {% endif %}
             </div>
-        
+          </div>
+        </div>
+      </div>
     </div>
-</nav>
-
-<div class="container">
-    {% block content %}
-    {% endblock content %}
-</div>
-
-<footer class="footer text-center black py-3">
-    <div class="container">
-        <span class="text-muted">© ShareIt</span>
+  </nav>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  <div class="container-xl bg-gray-200">
+  {% block body %}{% endblock %}
     </div>
-</footer>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
-        integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
-        crossorigin="anonymous"></script>
-
-</body>
-</html>
