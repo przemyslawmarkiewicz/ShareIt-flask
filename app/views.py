@@ -37,7 +37,6 @@ def login():
             flash('Invalid login.')
         else:
             session['username'] = username
-            flash('Logged in.')
             return redirect(url_for('index'))
 
     return render_template('login.html')
@@ -45,7 +44,6 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    flash('Logged out.')
     return redirect(url_for('index'))
 
 @app.route('/add_post', methods=['POST'])
@@ -76,9 +74,9 @@ def profile(username):
 
     user_being_viewed = User(user_being_viewed_username)
     posts = user_being_viewed.get_recent_posts()
+    num_of_posts = user_being_viewed.posts
 
     similar = []
-    common = []
 
     if logged_in_username:
         logged_in_user = User(logged_in_username)
@@ -86,12 +84,12 @@ def profile(username):
         if logged_in_user.username == user_being_viewed.username:
             similar = logged_in_user.get_similar_users()
         else:
-            common = logged_in_user.get_commonality_of_user(user_being_viewed)
+            similar = user_being_viewed.get_similar_users()
 
     return render_template(
         'profile.html',
         username=username,
+        num_of_posts=num_of_posts,
         posts=posts,
         similar=similar,
-        common=common
     )

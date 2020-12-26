@@ -13,14 +13,15 @@ matcher = NodeMatcher(graph)
 class User:
     def __init__(self, username):
         self.username = username
+        self.posts=0
 
     def find(self):
-        user = matcher.match('User', username= self.username).first()
+        user = matcher.match('ShareItUser', username= self.username).first()
         return user
 
     def register(self, password):
         if not self.find():
-            user = Node('User', username=self.username, password=bcrypt.encrypt(password))
+            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password), posts=self.posts)
             print(user)
             graph.create(user)
             return True
@@ -35,9 +36,9 @@ class User:
             return False
 
     def add_post(self, title, tags, text):
-        user = matcher.match('User', username=self.username).first()
+        user = matcher.match('ShareItUser', username=self.username).first()
         post = Node(
-            'Post',
+            'ShareItPost',
             id=str(uuid.uuid4()),
             title=title,
             text=text,
@@ -47,6 +48,12 @@ class User:
         )
         rel = Relationship(user, 'PUBLISHED', post)
         graph.create(rel)
+
+        query = """
+        MATCH (user:ShareItUser {username:$username})
+        SET user.posts = user.posts + 1
+        """
+        graph.run(query, username=self.username)
 
         tags = [x.strip() for x in tags.lower().split(',')]
         for name in set(tags):
@@ -60,9 +67,9 @@ class User:
 
     def like_post(self, post_id):
         user = self.find()
-        post = matcher.match('Post', id=post_id).first()
+        post = matcher.match('ShareItPost', id=post_id).first()
         query = """
-        MATCH (post:Post {id:$id})
+        MATCH (post:ShareItPost {id:$id})
         SET post.likes = post.likes + 1
         """
         graph.run(query, id=post_id)
@@ -70,10 +77,10 @@ class User:
 
     def get_recent_posts(self):
         query = '''
-        MATCH (user:User)-[:PUBLISHED]->(post:Post)<-[:TAGGED]-(tag:Tag)
+        MATCH (user:ShareItUser)-[:PUBLISHED]->(post:ShareItPost)<-[:TAGGED]-(tag:Tag)
         WHERE user.username = $username
         RETURN post, COLLECT(tag.name) AS tags
-        ORDER BY post.timestamp DESC LIMIT 5
+        ORDER BY post.timestamp DESC LIMIT 10
         '''
 
         return graph.run(query, username=self.username)
@@ -82,8 +89,8 @@ class User:
         # Find three users who are most similar to the logged-in user
         # based on tags they've both blogged about.
         query = '''
-        MATCH (you:User)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag:Tag),
-              (they:User)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag)
+        MATCH (you:ShareItUser)-[:PUBLISHED]->(:ShareItPost)<-[:TAGGED]-(tag:Tag),
+              (they:ShareItUser)-[:PUBLISHED]->(:ShareItPost)<-[:TAGGED]-(tag)
         WHERE you.username = $username AND you <> they
         WITH they, COLLECT(DISTINCT tag.name) AS tags
         ORDER BY SIZE(tags) DESC LIMIT 3
@@ -92,23 +99,10 @@ class User:
 
         return graph.run(query, username=self.username)
 
-    def get_commonality_of_user(self, other):
-        # Find how many of the logged-in user's posts the other user
-        # has liked and which tags they've both blogged about.
-        query = '''
-        MATCH (they:User {username:$they})
-        MATCH (you:User {username:$you})
-        OPTIONAL MATCH (they)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag:Tag),
-                       (you)-[:PUBLISHED]->(:Post)<-[:TAGGED]-(tag)
-        RETURN SIZE((they)-[:LIKED]->(:Post)<-[:PUBLISHED]-(you)) AS likes,
-               COLLECT(DISTINCT tag.name) AS tags
-        '''
-
-        return graph.run(query, they=other.username, you=self.username).next
 
 def get_todays_recent_posts():
     query = '''
-    MATCH (user:User)-[:PUBLISHED]->(post:Post)<-[:TAGGED]-(tag:Tag)
+    MATCH (user:ShareItUser)-[:PUBLISHED]->(post:ShareItPost)<-[:TAGGED]-(tag:Tag)
     WHERE post.date = $today
     RETURN user.username AS username, post, COLLECT(tag.name) AS tags
     ORDER BY post.timestamp DESC LIMIT 5

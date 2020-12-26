@@ -1,41 +1,61 @@
 {% extends "_base.html" %}
 {% block body %}
-
-<div class="text-center lg:w-2/3 w-full">
-  <h3 class="title-font sm:text-3xl text-3xl p-4 font-medium	 text-black font-mono">
-    {{ username }}'s profile </h3>
+  <div class="my-10">
+    <div class="bg-white rounded overflow-hidden shadow-lg">
+      <div class="text-center p-6  border-b">
+        <img class="h-24 w-24 rounded-full mx-auto" src="/static/undraw_male_avatar.svg"/>
+        <p class="pt-2 text-lg font-semibold">{{username}}</p>
+      </div>
+      <div class="border-b p-8">
+        {% if session.username %}
+        {% if session.username == username %}
+            <p class="text-gray-800 text-2xl">Users similar to you:</p>
+    
+              {% for user in similar %}
+                <div class="flex mb-4">
+                  <p>
+                <a class="font-bold text-md text-gray-600" href="{{ url_for('profile', username=user.similar_user) }}">{{ user.similar_user }}</a>
+                 also blogs about: <i>
+                  {% for tag in user.tags %}
+                  <div
+                  class="text-xs inline-flex items-center font-bold leading-sm uppercase ml-2 px-2 py-1 bg-blue-400 rounded-full">
+                                    <i class="text-xs text-gray-800"># {{tag}}</i>
+                                  </div>
+                  </i>
+                </p>
+                </div>
+                  {% endfor %}
+                
+              {% else %}
+                <p>There aren't any users who've blogged about the same tags as you!</p>
+              {% endfor %}
+        {% else %}
+             {%for user in similar%}
+                {% if user.similar_user == session.username %}
+                  <p class="px-1 text-lg">This user also posted about:  </p>
+                  {% for tag in user.tags %}
+                  <div
+                  class="text-xs inline-flex items-center font-bold leading-sm uppercase px-2 py-1 bg-blue-400 rounded-full">
+                                    <i class="text-xs text-gray-800">#{{tag}}</i>
+                                  </div>
+                  {% endfor %}
+                {% endif %}
+             {%endfor%}
+        {% endif %}
+    {% endif %}
+      </div>
+    </div>
   </div>
 
-{% if session.username %}
-    {% if session.username == username %}
-        <h3>Users similar to you:</h3>
-
-          {% for user in similar %}
-            <p>
-            <a href="{{ url_for('profile', username=user.similar_user) }}">{{ user.similar_user }}</a>
-            also blogs about <i>{{ ", ".join(user.tags) }}</i>
-            </p>
-          {% else %}
-            <p>There aren't any users who've blogged about the same tags as you!</p>
-          {% endfor %}
-
-        <h3>Your recent posts:</h3>
-
-    {% else %}
-
-  <p>{{ username }} has liked {{ common.likes }} of your posts and
-      {% if common.tags %}
-      also blogs about <i>{{ ", ".join(common.tags) }}</i>
-      {% else %}
-      hasn't blogged about any of the same tags
-      {% endif %}
-  </p>
-
-  <h3>{{ username }}'s recent posts:</h3>
-
-    {% endif %}
+  {% if session.username == username %}
+  <p class="w-full text-base sm:text-lg md:text-xl text-center lg:text-2xl xl:text-5xl">
+    Your recent posts: <br> 
+</p>
+{% else %}
+<p class="w-full text-base sm:text-lg md:text-xl text-center lg:text-2xl xl:text-5xl">
+  {{ username }}'s recent posts: <br> 
+</p>
 {% endif %}
-
 {% include "display_posts.html" %}
 
 {% endblock %}
