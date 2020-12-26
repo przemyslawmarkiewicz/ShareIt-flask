@@ -13,7 +13,6 @@ matcher = NodeMatcher(graph)
 class User:
     def __init__(self, username):
         self.username = username
-        self.posts=0
 
     def find(self):
         user = matcher.match('ShareItUser', username= self.username).first()
@@ -21,7 +20,7 @@ class User:
 
     def register(self, password):
         if not self.find():
-            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password), posts=self.posts)
+            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password), num_of_posts=0)
             print(user)
             graph.create(user)
             return True
@@ -51,7 +50,7 @@ class User:
 
         query = """
         MATCH (user:ShareItUser {username:$username})
-        SET user.posts = user.posts + 1
+        SET user.num_of_posts = user.num_of_posts + 1
         """
         graph.run(query, username=self.username)
 
@@ -75,6 +74,14 @@ class User:
         graph.run(query, id=post_id)
         graph.merge(Relationship(user, 'LIKED', post))
 
+    def get_num_of_posts(self):
+        query = """
+        MATCH (user:ShareItUser {username: $username})
+        return user.num_of_posts
+        """
+
+        return graph.run(query, username=self.username)
+
     def get_recent_posts(self):
         query = '''
         MATCH (user:ShareItUser)-[:PUBLISHED]->(post:ShareItPost)<-[:TAGGED]-(tag:Tag)
@@ -86,8 +93,6 @@ class User:
         return graph.run(query, username=self.username)
 
     def get_similar_users(self):
-        # Find three users who are most similar to the logged-in user
-        # based on tags they've both blogged about.
         query = '''
         MATCH (you:ShareItUser)-[:PUBLISHED]->(:ShareItPost)<-[:TAGGED]-(tag:Tag),
               (they:ShareItUser)-[:PUBLISHED]->(:ShareItPost)<-[:TAGGED]-(tag)

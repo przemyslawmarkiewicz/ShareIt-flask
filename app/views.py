@@ -74,7 +74,8 @@ def profile(username):
 
     user_being_viewed = User(user_being_viewed_username)
     posts = user_being_viewed.get_recent_posts()
-    num_of_posts = user_being_viewed.posts
+    num_of_posts = user_being_viewed.get_num_of_posts()
+    print(user_being_viewed.get_num_of_posts())
 
     similar = []
 
@@ -90,6 +91,6 @@ def profile(username):
         'profile.html',
         username=username,
         num_of_posts=num_of_posts,
-        posts=posts,
+        # posts=posts,
         similar=similar,
     )
