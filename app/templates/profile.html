@@ -5,26 +5,26 @@
       <div class="text-center p-6  border-b">
         <img class="h-24 w-24 rounded-full mx-auto" src="/static/undraw_male_avatar.svg"/>
         <p class="pt-2 text-lg font-semibold">{{username}}</p>
+        {{num_of_posts}}
       </div>
+      {% if session.username %}
       <div class="border-b p-8">
-        {% if session.username %}
+        
         {% if session.username == username %}
             <p class="text-gray-800 text-2xl">Users similar to you:</p>
     
               {% for user in similar %}
-                <div class="flex mb-4">
+                <div class="mb-5">
                   <p>
                 <a class="font-bold text-md text-gray-600" href="{{ url_for('profile', username=user.similar_user) }}">{{ user.similar_user }}</a>
-                 also blogs about: <i>
+                 also blogs about:
                   {% for tag in user.tags %}
                   <div
-                  class="text-xs inline-flex items-center font-bold leading-sm uppercase ml-2 px-2 py-1 bg-blue-400 rounded-full">
-                                    <i class="text-xs text-gray-800"># {{tag}}</i>
+                  class="text-xs inline-flex items-center font-bold leading-sm uppercase px-2 py-1 bg-blue-400 rounded-full">
+                                    <i class="text-xs text-gray-800">#{{tag}}</i>
                                   </div>
-                  </i>
-                </p>
-                </div>
                   {% endfor %}
+                                </div>
                 
               {% else %}
                 <p>There aren't any users who've blogged about the same tags as you!</p>
@@ -42,8 +42,8 @@
                 {% endif %}
              {%endfor%}
         {% endif %}
-    {% endif %}
       </div>
+    {% endif %}
     </div>
   </div>
 
