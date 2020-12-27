@@ -37,8 +37,7 @@ def login():
             flash('Invalid login.')
         else:
             session['username'] = username
-            return redirect(url_for(''))
-index
+            return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout')
