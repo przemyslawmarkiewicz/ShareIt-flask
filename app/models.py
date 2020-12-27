@@ -3,10 +3,12 @@ from py2neo.matching import NodeMatcher
 from passlib.hash import bcrypt
 from datetime import datetime
 import os
-from config import database_uri, database_user, database_password
+# from config import database_uri, database_user, database_password
 import uuid
 
-graph = Graph(database_uri, auth=(database_user, database_password))
+
+url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
+graph = Graph(url + '/db/data/')
 matcher = NodeMatcher(graph)
 
 
