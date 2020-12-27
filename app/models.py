@@ -3,7 +3,6 @@ from py2neo.matching import NodeMatcher
 from passlib.hash import bcrypt
 from datetime import datetime
 import os
-from config import database_uri
 
 url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
 graph = Graph(url + '/db/data/')
