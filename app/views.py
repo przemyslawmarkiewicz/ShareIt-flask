@@ -5,7 +5,7 @@ from app import app
 @app.route('/')
 def index():
     posts = get_todays_recent_posts()
-    return render_template('index.html', posts=posts)
+    return render_template('home.html', posts=posts)
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -37,8 +37,8 @@ def login():
             flash('Invalid login.')
         else:
             session['username'] = username
-            return redirect(url_for('index'))
-
+            return redirect(url_for(''))
+index
     return render_template('login.html')
 
 @app.route('/logout')
