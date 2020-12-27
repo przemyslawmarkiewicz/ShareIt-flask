@@ -6,7 +6,7 @@ import os
 from config import database_uri
 
 url = os.environ.get('GRAPHENEDB_URL')
-graph = Graph(url, username=os.environ.get("NEO4J_USERNAME"), password=os.environ.get("NEO4J_PASSWORD")))
+graph = Graph(url + '/db/data/', username=os.environ.get("NEO4J_USERNAME"), password=os.environ.get("NEO4J_PASSWORD"))
 matcher = NodeMatcher(graph)
 
 
