@@ -3,12 +3,9 @@ from py2neo.matching import NodeMatcher
 from passlib.hash import bcrypt
 from datetime import datetime
 import os
-# from config import database_uri, database_user, database_password
-import uuid
+from config import database_uri
 
-
-url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
-graph = Graph(url + '/db/data/')
+graph = Graph(database_uri, auth=(os.environ.get("NEO4J_USERNAME"), os.environ.get("NEO4J_PASSWORD")))
 matcher = NodeMatcher(graph)
 
 
@@ -22,7 +19,7 @@ class User:
 
     def register(self, password):
         if not self.find():
-            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password))
+            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password), num_of_posts=0)
             print(user)
             graph.create(user)
             return True
