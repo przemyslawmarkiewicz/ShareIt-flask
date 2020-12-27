@@ -20,7 +20,7 @@ class User:
 
     def register(self, password):
         if not self.find():
-            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password), num_of_posts=0)
+            user = Node('ShareItUser', username=self.username, password=bcrypt.encrypt(password))
             print(user)
             graph.create(user)
             return True
@@ -48,11 +48,6 @@ class User:
         rel = Relationship(user, 'PUBLISHED', post)
         graph.create(rel)
 
-        query = """
-        MATCH (user:ShareItUser {username:$username})
-        SET user.num_of_posts = user.num_of_posts + 1
-        """
-        graph.run(query, username=self.username)
 
         tags = [x.strip() for x in tags.lower().split(',')]
         for name in set(tags):
@@ -76,11 +71,12 @@ class User:
 
     def get_num_of_posts(self):
         query = """
-        MATCH (user:ShareItUser {username: $username})
-        return user.num_of_posts
+        MATCH (u:ShareItUser {username:$username})-[r:PUBLISHED]->(p:ShareItPost)
+        RETURN count(p) as num_of_posts;
         """
 
-        return graph.run(query, username=self.username)
+        result =  graph.run(query, username=self.username).to_table()
+        return result[0][0]
 
     def get_recent_posts(self):
         query = '''

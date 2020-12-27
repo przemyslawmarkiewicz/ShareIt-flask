@@ -5,7 +5,13 @@
       <div class="text-center p-6  border-b">
         <img class="h-24 w-24 rounded-full mx-auto" src="/static/undraw_male_avatar.svg"/>
         <p class="pt-2 text-lg font-semibold">{{username}}</p>
-        {{num_of_posts}}
+          <span class="text-base font-semibold text-gray-700 mr-2">
+            {% if num_of_posts == 1 %}
+            {{num_of_posts}} post
+            {% else %}
+            {{num_of_posts}} posts
+            {% endif %}
+          </span>
       </div>
       {% if session.username %}
       <div class="border-b p-8">
@@ -56,6 +62,6 @@
   {{ username }}'s recent posts: <br> 
 </p>
 {% endif %}
-{% include "display_posts.html" %}
+{% include "post_list.html" %}
 
 {% endblock %}
