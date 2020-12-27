@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 from config import database_uri
 
-url = os.environ.get('GRAPHENEDB_URL')
+url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
 graph = Graph(url + '/db/data/', username=os.environ.get("NEO4J_USERNAME"), password=os.environ.get("NEO4J_PASSWORD"))
 matcher = NodeMatcher(graph)
 
