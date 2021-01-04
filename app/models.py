@@ -8,7 +8,7 @@ username = os.environ.get("NEO4J_USERNAME")
 password = os.environ.get("NEO4J_PASSWORD")
 database_uri = os.environ.get("DATABASE_URI")
 
-graph = Graph(database_uri, auth=(username, password))
+graph = Graph("bolt://149.156.109.37:7687", auth=(username, password))
 matcher = NodeMatcher(graph)
 
 
