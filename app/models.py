@@ -4,8 +4,11 @@ from passlib.hash import bcrypt
 from datetime import datetime
 import os
 
-url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
-graph = Graph(url + '/db/data/')
+username = os.environ.get("NEO4J_USERNAME")
+password = os.environ.get("NEO4J_PASSWORD")
+database_uri = os.environ.get("DATABASE_URI")
+
+graph = Graph(database_uri, auth=(username, password))
 matcher = NodeMatcher(graph)
 
 
