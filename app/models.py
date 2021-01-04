@@ -8,7 +8,7 @@ username = os.environ.get("NEO4J_USERNAME")
 password = os.environ.get("NEO4J_PASSWORD")
 database_uri = os.environ.get("DATABASE_URI")
 
-graph = Graph("bolt://149.156.109.37:7687", auth=(username, password))
+graph = Graph(database_uri, auth=(username, password))
 matcher = NodeMatcher(graph)
 
 
@@ -49,7 +49,6 @@ class User:
         )
         rel = Relationship(user, 'PUBLISHED', post)
         graph.create(rel)
-
 
         tags = [x.strip() for x in tags.lower().split(',')]
         for name in set(tags):
