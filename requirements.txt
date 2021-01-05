@@ -46,3 +46,4 @@ webencodings==0.5.1
 websocket-client==0.57.0
 Werkzeug==1.0.1
 gunicorn== 19.9.0
+Flask-Session==0.3.2
