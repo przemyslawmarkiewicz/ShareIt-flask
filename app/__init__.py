@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask
 import os
 from neo4j import GraphDatabase
 

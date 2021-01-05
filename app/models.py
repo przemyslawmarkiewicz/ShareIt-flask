@@ -3,6 +3,7 @@ from py2neo.matching import NodeMatcher
 from passlib.hash import bcrypt
 from datetime import datetime
 import os
+import uuid
 
 username = os.environ.get("NEO4J_USERNAME")
 password = os.environ.get("NEO4J_PASSWORD")
@@ -49,6 +50,7 @@ class User:
         )
         rel = Relationship(user, 'PUBLISHED', post)
         graph.create(rel)
+
 
         tags = [x.strip() for x in tags.lower().split(',')]
         for name in set(tags):
